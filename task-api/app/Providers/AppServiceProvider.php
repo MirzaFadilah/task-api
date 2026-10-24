@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
@@ -20,8 +21,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (env('APP_ENV') !== 'local') {
-        URL::forceScheme('https');
+        if(config("APP.ENV") === "production"){
+            URL::forceScheme('https');
+        }
+
+        Gate::define("viewApiDocs", function($user = null){
+            return true;
+        });
     }
-}
 }
